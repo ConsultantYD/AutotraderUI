@@ -21,11 +21,13 @@ def get_def_config_values(dict_name, key, value):
         def_value = value
     return def_value
 
+
 st.title("🕟 Backtesting")
 db = connect_to_firebase_db_and_authenticate(project_name="autotrader")
 oanda = tpqoa('oanda.cfg')
 indices_list = oanda.get_instruments()
-clean_indices_list = [i for i in indices_list if i[1] in INSTRUMENT_MARKETS_DICT.keys()]
+clean_indices_list = [i for i in indices_list if i[1]
+                      in INSTRUMENT_MARKETS_DICT.keys()]
 
 with st.sidebar:
     st.title("AutoTrader")
@@ -38,7 +40,7 @@ with st.sidebar:
 
     st.session_state["instrument"] = st.selectbox(
         "Default instrument", clean_indices_list, index=instrument_idx)[1]
-    
+
 
 st.header("New Experiment")
 with st.expander("Show/Hide Configuration", True):
@@ -68,7 +70,6 @@ with st.expander("Show/Hide Configuration", True):
 
         agent_config = {
             "rsi_threshold": rsi_threshold,
-            "stoch_threshold": stoch_threshold,
             "trade_quantity": trade_quantity,
             "loss_price_%": loss_price_perc,
             "gain_price_%": gain_price_perc,
@@ -91,7 +92,7 @@ with st.expander("Show/Hide Configuration", True):
 
         st.session_state["instrument"] = col11.selectbox(
             "Instrument", clean_indices_list, index=instrument_idx)[1]
-        
+
         sim_len_days = col11.number_input(
             "Duration (days)", 1, 7, 3)
         sim_spread = col11.checkbox("Simulate spread", True)
