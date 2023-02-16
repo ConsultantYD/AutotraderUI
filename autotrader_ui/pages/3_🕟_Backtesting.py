@@ -64,9 +64,6 @@ with st.expander("Show/Hide Configuration", True):
                 "Loss price (%)", 0., 100., value=0.01, step=0.001, format="%.3f")
             gain_price_perc = st.number_input(
                 "Gain price (%)", 0., 100., value=0.03, step=0.001, format="%.3f")
-            stoch_threshold = st.number_input(
-                "Stoch Threshold", 0, 1000, value=80, step=1)
-            stoch_condition = st.checkbox("Stoch Condition", True)
             ema_condition = st.checkbox("EMA Condition", True)
 
         agent_config = {
@@ -78,7 +75,6 @@ with st.expander("Show/Hide Configuration", True):
             "activity_limit": activity_limit,
             "condition_macd": macd_condition,
             "condition_rsi_50": rsi50_condition,
-            "condition_stoch_true": stoch_condition,
             "condition_ema_true": ema_condition
         }
 
