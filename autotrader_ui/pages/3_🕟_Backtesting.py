@@ -99,7 +99,7 @@ with st.expander("Show/Hide Configuration", True):
         initial_stocks = col12.number_input(
             "Initial stocks", 0, 10000, step=1, value=0)
         initial_capital = col12.number_input(
-            "Initial capital", 1000, 10000, step=1000, value=10000)
+            "Initial capital", 1000, 20000, step=1000, value=10000)
 
         execution_config = {
             "instrument": st.session_state["instrument"],
