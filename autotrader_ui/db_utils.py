@@ -3,6 +3,7 @@ from google.oauth2 import service_account
 import json
 import os
 import traceback
+import streamlit as st
 
 def connect_to_firebase_db_and_authenticate(project_name: str = None, local_auth_file: str = "firestore-key.json"):
     """Connects to a firebase project using a local authentication file, or using a streamlit toml secrets file.
