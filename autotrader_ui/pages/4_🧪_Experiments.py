@@ -14,7 +14,8 @@ from autotrader_ui.db_utils import (
     connect_to_firebase_db_and_authenticate,
     get_all_experiments,
     get_all_experiments_name,
-    get_specific_experiment
+    get_specific_experiment,
+    delete_experiment
 )
 
 @st.cache_resource()
@@ -136,10 +137,14 @@ with st.sidebar:
     st.session_state["instrument"] = st.selectbox(
         "Default instrument", clean_indices_list, index=instrument_idx)[1]
 
-col00, _ = st.columns(2)
+col00, _, _ = st.columns((2, 1, 1))
 experiments_list = get_all_experiments_name(db)
 experiment_name = col00.selectbox("Select experiment", experiments_list)
+if col00.button("Delete Experiment"):
+    delete_experiment(db, experiment_name=experiment_name)
+    st.experimental_rerun()
 exp_values = get_experiment_values(experiment_name=experiment_name)
+
 
 if exp_values["failure"]["failure_flag"]:
     st.error("Experiment calculation failed.")

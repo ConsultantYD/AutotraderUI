@@ -2,7 +2,6 @@ from google.cloud import firestore
 from google.oauth2 import service_account
 import json
 import os
-import streamlit as st
 import traceback
 
 def connect_to_firebase_db_and_authenticate(project_name: str = None, local_auth_file: str = "firestore-key.json"):
@@ -24,7 +23,7 @@ def connect_to_firebase_db_and_authenticate(project_name: str = None, local_auth
     elif "textkey" in st.secrets.keys():
         key_dict = json.loads(st.secrets["textkey"])
         with open("firestore-key.json", "w+") as f:
-            json.dump(key_dict,f)
+            json.dump(key_dict, f)
         #creds = service_account.Credentials.from_service_account_info(key_dict)
         #db = firestore.Client(credentials=creds, project=project_name)
         db = firestore.Client.from_service_account_json("firestore-key.json")
@@ -68,7 +67,6 @@ def get_all_experiments(db) -> dict:
 
     return all_experiments
 
-
 def get_all_experiments_name(db) -> dict:
 
     # Let's make a reference to ALL of the posts
@@ -81,11 +79,17 @@ def get_all_experiments_name(db) -> dict:
 
     return experiments_names
 
-def get_specific_experiment(db, experiment_name: str) -> dict:
-    doc_ref = db.collection("Experiment").document(experiment_name)
-    doc = doc_ref.get()  # Get data for document
+def get_all_live(db) -> dict:
 
-    return doc.to_dict()
+    # Let's make a reference to ALL of the posts
+    posts_ref = db.collection("Live")
+
+    # For a reference to a collection, we use .stream() instead of .get()
+    all_lives = {}
+    for doc in posts_ref.stream():
+        all_lives[doc.id] = doc.to_dict()
+
+    return all_lives
 
 def get_specific_backtest(db, backtest_name: str) -> dict:
     """Fetches all information for a specific backtest.
@@ -102,13 +106,49 @@ def get_specific_backtest(db, backtest_name: str) -> dict:
 
     return doc.to_dict()
 
-def create_backtest(db, backtest_name: str, data: dict) -> dict:
+def get_specific_experiment(db, experiment_name: str) -> dict:
+    doc_ref = db.collection("Experiment").document(experiment_name)
+    doc = doc_ref.get()  # Get data for document
+
+    return doc.to_dict()
+
+def get_specific_live(db, agent_name: str) -> dict:
+
+    doc_ref = db.collection("Live").document(agent_name)
+    doc = doc_ref.get()  # Get data for document
+
+    return doc.to_dict()
+
+def update_specific_live(db, agent_name: str, new_data: dict):
+
+    data = get_specific_live(db=db, agent_name=agent_name)
+    data.update(new_data)
+    create_live(db=db, agent_name=agent_name, data=new_data)
+
+def create_backtest(db, backtest_name: str, data: dict) -> bool:
+
     doc_ref = db.collection("Backtest").document(backtest_name)
+    doc = doc_ref.set(data)  # Get data for document
+
+def create_experiment(db, experiment_name: str, data: dict) -> bool:
+
+    doc_ref = db.collection("Experiment").document(experiment_name)
+    doc = doc_ref.set(data)  # Get data for document
+
+def create_live(db, agent_name: str, data: dict) -> bool:
+
+    doc_ref = db.collection("Live").document(agent_name)
     doc = doc_ref.set(data)  # Get data for document
 
 def delete_backtest(db, backtest_name: str) -> bool:
 
     doc_ref = db.collection("Backtest").document(backtest_name)
+    doc_ref.set({})
+    doc_ref.delete()
+
+def delete_experiment(db, experiment_name: str) -> bool:
+
+    doc_ref = db.collection("Experiment").document(experiment_name)
     doc_ref.set({})
     doc_ref.delete()
 
