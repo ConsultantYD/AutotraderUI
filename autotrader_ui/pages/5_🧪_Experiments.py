@@ -161,7 +161,10 @@ else:
     final_stocks = exp_values["execution"]["final_stocks"]
     final_bid_price = exp_values["execution"]["final_bid_price"]
     gain = final_capital - initial_capital
-    gain_perc = (gain / initial_capital) * 100
+    first_transaction = list(exp_values["transactions"].values())[0]
+    first_transaction_cost = first_transaction["price"] * \
+        first_transaction["volume"]
+    gain_perc = (gain / first_transaction_cost) * 100
 
     col_ratios = (1, 5, 1, 5, 5)
 
