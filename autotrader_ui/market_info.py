@@ -3,6 +3,25 @@ import datetime as dt
 import pytz
 
 MARKET_OPEN_HOURS = {
+    # TODO: Correct times for Globex after changing time format to account more flex
+    "Globex": {
+        0: {"start": (0, 0), "end": (22, 0)},  # Monday
+        1: {"start": (0, 0), "end": (22, 0)},
+        2: {"start": (0, 0), "end": (22, 0)},
+        3: {"start": (0, 0), "end": (22, 0)},
+        4: {"start": (0, 0), "end": (22, 0)},
+        5: {"start": (0, 0), "end": (0, 0)},
+        6: {"start": (23, 0), "end": (23, 59)}
+    },
+    "Unknown_Platinum": {
+        0: {"start": (0, 0), "end": (22, 0)},  # Monday
+        1: {"start": (0, 0), "end": (22, 0)},
+        2: {"start": (0, 0), "end": (22, 0)},
+        3: {"start": (0, 0), "end": (22, 0)},
+        4: {"start": (0, 0), "end": (22, 0)},
+        5: {"start": (0, 0), "end": (0, 0)},
+        6: {"start": (23, 0), "end": (23, 59)}
+    },
     "NYSE": {
         0: {"start": (14, 30), "end": (21, 0)},  # Monday
         1: {"start": (14, 30), "end": (21, 0)},
@@ -46,10 +65,12 @@ INSTRUMENT_MARKETS_DICT = {
     'XAG_JPY': 'NYSE',
     'XAG_NZD': 'NYSE',
     'XAG_SGD': 'NYSE',
+    'XPT_USD': 'Unknown_Platinum',
     'USB10Y_USD': 'NYSE',
     'USB02Y_USD': 'NYSE',
     'USB05Y_USD': 'NYSE',
     'NAS100_USD': 'NYSE',
+    'NATGAS_USD': 'Globex',
     'US2000_USD': 'NYSE',
     'SPX500_USD': 'NYSE',
     'USB30Y_USD': 'NYSE',
