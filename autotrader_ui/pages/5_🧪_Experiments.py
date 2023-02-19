@@ -155,16 +155,19 @@ else:
     start = exp_values['start']
     end = exp_values['end']
     instrument = exp_values["execution"]["instrument"]
+
+    df = generate_experiment_df(experiment_name=experiment_name,
+                                experiment_values=exp_values,
+                                start=start, end=end)
+
     final_capital = exp_values["execution"]["final_capital"]
     initial_capital = exp_values["execution"]["initial_capital"]
     initial_stocks = exp_values["execution"]["initial_stocks"]
     final_stocks = exp_values["execution"]["final_stocks"]
     final_bid_price = exp_values["execution"]["final_bid_price"]
     gain = final_capital - initial_capital
-    first_transaction = list(exp_values["transactions"].values())[0]
     # TODO: Update this to use first BUYING
-    first_transaction_cost = abs(first_transaction["price"] *
-                                 first_transaction["volume"])
+    first_transaction_cost = df[df.opening == 1]['c'].values[0]
     gain_perc = (gain / first_transaction_cost) * 100
 
     col_ratios = (1, 5, 1, 5, 5)
@@ -197,10 +200,6 @@ else:
         st.write(exp_values["agent"])
 
     st.subheader("Transactions")
-
-    df = generate_experiment_df(experiment_name=experiment_name,
-                                experiment_values=exp_values,
-                                start=start, end=end)
 
     if df["opening"].count() == 0:
         st.warning("No transactions were done during this experiment.")
